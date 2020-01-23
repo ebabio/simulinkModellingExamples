@@ -93,7 +93,7 @@ pOL = pole(lsysOL);
 
 % add a min input lqr control in continuous time
 [K, ~, pCL] = lqr(lsysOL, zeros(size(lsysOL.a)), ones(size(lsysOL.b,2)) );
-Ts = 100*dt;
+Ts = 50*dt;
 
 % display new poles
 f2 = figure(2);
@@ -135,16 +135,16 @@ setlinio('duffing', []);
 ioK(2) = linio('duffing/DuffingSystem', 1, 'openinput');
 ioK(1) = linio('duffing/controller', 1,'output');
 setlinio('duffing',ioK)
-linoptions = linearizeOptions( 'SampleTime', Ts, 'UseExactDelayModel' , 'on');
+linoptions = linearizeOptions( 'SampleTime', Ts); %, 'UseExactDelayModel' , 'on');
 [lsysFBDT, ~, infoFBDT] = linearize('duffing', ioK, linoptions);
-lsysFB = d2c(lsysFBDT,'zoh');
+lsysFB = d2c(lsysFBDT,'tustin');
 
 lsysCL = feedback(lsysOL, lsysFB, +1); %positive feedback
 
 % display info
 
 lsysCL
-polesDT = pole(lsysCL)
+polesCL = pole(lsysCL)
 
 %% Interesting facts
 
