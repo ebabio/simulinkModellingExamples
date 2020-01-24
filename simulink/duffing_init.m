@@ -21,8 +21,11 @@ phi = 0;
 %% Simulation parameters
 
 dt = 1e-2;
-x0 = [0; 1];
+x0 = [0; .1];
 t_end = 10;
+
+% auxiliary
+xDelay = [0;0];
 
 %% Simulate Open Loop
 
@@ -56,10 +59,10 @@ legend(f1Legend);
 % y: outputs
 
 % find an equilibrium
-% [xEq, uEq, yEq, xDotEq] = trim('duffing',x0, [], []);
+[xEq, uEq, yEq, xDotEq] = trim('duffing',[x0; xDelay], [], []);
 
-xEq = zeros(2,1);
-uEq = [];
+% xEq = zeros(2,1);
+% uEq = [];
 
 % find a complex equilibrium
 % [x,u,y,dx,options] = trim('sys',x0,u0,y0,ix,iu,iy,dx0,idx,options)
@@ -93,7 +96,7 @@ pOL = pole(lsysOL);
 
 % add a min input lqr control in continuous time
 [K, ~, pCL] = lqr(lsysOL, zeros(size(lsysOL.a)), ones(size(lsysOL.b,2)) );
-Ts = 50*dt;
+Ts = 10*dt;
 
 % display new poles
 f2 = figure(2);
@@ -135,7 +138,7 @@ setlinio('duffing', []);
 ioK(2) = linio('duffing/DuffingSystem', 1, 'openinput');
 ioK(1) = linio('duffing/controller', 1,'output');
 setlinio('duffing',ioK)
-linoptions = linearizeOptions( 'SampleTime', Ts); %, 'UseExactDelayModel' , 'on');
+linoptions = linearizeOptions( 'SampleTime', Ts);
 [lsysFBDT, ~, infoFBDT] = linearize('duffing', ioK, linoptions);
 lsysFB = d2c(lsysFBDT,'tustin');
 
@@ -156,7 +159,7 @@ polesCL = pole(lsysCL)
 
 % we can compile the system and access it programatically
 [sizes, x0Alt, xStr] = duffing([],[],[],'compile');
-derivs = duffing(0, x0, [],'derivs'); % get the states derivatives
+derivs = duffing(0, xEq, [],'derivs'); % get the states derivatives
 duffing([],[],[],'term');
 
 % A more human readable version of the states
