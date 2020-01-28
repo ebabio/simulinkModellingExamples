@@ -5,67 +5,24 @@
 clear
 clc
 
-%% Duffing system parameters
-% Reusing the nomenclature from: http://mathworld.wolfram.com/DuffingDifferentialEquation.html
+%% Run init script
 
-% duffing system
-delta = 0;
-beta = 1;
-omega2 = -1;
-
-% forcing term
-gamma = 0;
-omega = .01;
-phi = 0;
-
-%% Simulation parameters
-
-dt = 1e-2;
-x0 = [0; .1];
-t_end = 10;
-
-% auxiliary
-xDelay = [0;0];
-
-%% Simulate Open Loop
-
-% no feedback
-K = zeros(1,2);
-Ts = 100*dt;
-
-% simulate model
-simOut = sim('duffing');
-
-% Postprocess
-x = simOut.yout{1}.Values.Data';
-
-f1 = figure(1);
-clf reset
-f1.Name=  'Open Loop Sim';
-f1.NumberTitle = 'off';
-plot(x(1,:), x(2,:))
-axis equal
-title('Duffing System Phase Portrait')
-xlabel('x')
-ylabel('xDot')
-f1Legend{1} = 'Open Loop';
-legend(f1Legend);
+% define parameters for the duffing system and run an open loop sim
+duffing_init;
 
 %% Trim
+% this method is contained in Simulink Control Design. It much more
+% flexible than the classical trim function and can work with reference
+% model
 
-% trim model
-% x: internal state
-% u: inputs
-% y: outputs
+% operating point can be generated using the steady-state manager and exported here
+% and then trimmed in batches for example.
 
-% find an equilibrium
-[xEq, uEq, yEq, xDotEq] = trim('duffing',[x0; xDelay], [], []);
+% get an operating point from the current state
+op0 = operspec(model);
 
-% xEq = zeros(2,1);
-% uEq = [];
-
-% find a complex equilibrium
-% [x,u,y,dx,options] = trim('sys',x0,u0,y0,ix,iu,iy,dx0,idx,options)
+% find operating point
+opTrim = findop(model,op0);
 
 %% Linearize model
 
@@ -83,7 +40,7 @@ lsysCT.OutputName = linStruct.OutputName;
 % define linearization points
 setlinio('duffing', []);
 ioOL(1) = linio('duffing/controller', 1,'openinput');
-ioOL(2) = linio('duffing/DuffingSystem', 1, 'output');
+ioOL(2) = linio('duffing/duffingSystem', 1, 'output');
 setlinio('duffing',ioOL)
 
 % linearize
