@@ -4,7 +4,6 @@
 
 clear
 clc
-addpath(fullfile(pwd,'matlab_hotfix'));
 
 %% Duffing system parameters
 % Reusing the nomenclature from: http://mathworld.wolfram.com/DuffingDifferentialEquation.html

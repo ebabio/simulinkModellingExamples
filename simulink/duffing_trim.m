@@ -13,7 +13,7 @@ duffing_init;
 %% Trim using Operating Point
 % this method is contained in Simulink Control Design. It offers many more 
 % features than the classical trim function such as:
-% * working with reference modes
+% * working with reference models
 % * can have objective and constraint functions for trimming
 % * can be used for remapping states
 % see https://www.mathworks.com/help/slcontrol/ug/operspec.html
@@ -67,6 +67,8 @@ u0_struct = getinputstruct(opTrim);
 x0_struct = getstatestruct(opTrim);
 
 % we can compile the system and access it programatically
+% how to access the model and the effect of these function is defined in
+% https://www.mathworks.com/help/simulink/sfg/how-the-simulink-engine-interacts-with-c-s-functions.html
 [sizes, x0Alt, xStr] = feval(model, [],[],[],'compile');
 y = feval(model, 0, x0_struct, u0_struct,'outputs'); % need to do it before calling anything else
 xDot = feval(model, 0, x0_struct, u0_struct,'derivs'); % get the states derivatives
