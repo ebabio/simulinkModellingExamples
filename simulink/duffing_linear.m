@@ -1,4 +1,4 @@
-%%  Initialization script for the Duffing continuous/discrete simulation
+%%  Linearize the Duffing continuous simulation
 
 %% Setup workspace
 

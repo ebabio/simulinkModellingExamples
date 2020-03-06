@@ -1,4 +1,4 @@
-%%  Initialization script for the Duffing continuous/discrete simulation
+%%  Trim model for a Duffing continuous/discrete system
 
 %% Setup workspace
 

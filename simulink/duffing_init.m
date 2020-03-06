@@ -1,4 +1,4 @@
-%%  Initialization script for the Duffing continuous/discrete simulation
+%%  Initialization script for the Duffing continuous/discrete system simulation
 
 %% Setup workspace
 
@@ -41,7 +41,6 @@ catch
 end
 
 % open model and dependencies
-open_system(model)
 refMdls = find_mdlrefs(model);
 for i=1:size(refMdls)
     open_system(refMdls{i})  
