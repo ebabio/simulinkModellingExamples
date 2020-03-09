@@ -43,7 +43,7 @@ end
 % open model and dependencies
 refMdls = find_mdlrefs(model);
 for i=1:size(refMdls)
-    open_system(refMdls{i})  
+    load_system(refMdls{i})  
 end
 
 % model settings

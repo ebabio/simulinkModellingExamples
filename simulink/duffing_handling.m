@@ -20,7 +20,7 @@ open_system(model)
 refMdls = find_mdlrefs(model); % refMdls includes the top level model
 
 for i=1:size(refMdls)
-    open_system(refMdls{i})
+    load_system(refMdls{i}) % load but don't open GUI, it's faster
 end
 
 clear refMdls refMdlBlks
@@ -28,8 +28,8 @@ clear refMdls refMdlBlks
 %% Comment blocks
 
 % comment through adc to have a fully continuous system
-block = strjoin({model,'controller','adc'},'/'); % this block is behind a reference path
-derefBlock = dereference_block(block);
+block = strjoin({model,'controller','adc'},blocksep); % this block is behind a reference path
+derefBlock = dereference_block(block); % see SKD Matlab Toolset
 
 % comment block
 set_param(derefBlock,'Commented','through')
