@@ -93,19 +93,15 @@ function opspec = trim_constraints(opspec)
 % - The defaults for all states are Known = false, SteadyState = true,
 %   Min = -Inf, Max = Inf, dxMin = -Inf, and dxMax = Inf.
 
-% State (1) - duffing/controller|controller/Delay
-index = getStateIndex_SKD(opspec, 'duffing/controller|controller/adc');
-% - Default model initial conditions are used to initialize optimization.
-
 % duffing/duffingSystem/Integrator/xDotIntegrator
-index = getStateIndex_SKD(opspec, 'xDot');
+index = getStateIndex_hotfix(opspec, 'xDot');
 % - Default model initial conditions are used to initialize optimization.
 opspec.States(index(1)).SteadyState = false;
 opspec.States(index(1)).Min = 0.05;
 
-% State (3) - duffing/duffingSystem/Integrator/xIntegrator
+% duffing/duffingSystem/Integrator/xIntegrator
 % - Default model initial conditions are used to initialize optimization.
-index = getStateIndex_SKD(opspec, 'x');
+index = getStateIndex_hotfix(opspec, 'x');
 opspec.States(index(1)).SteadyState = false;
 opspec.States(index(1)).Min = 0.8;
 end

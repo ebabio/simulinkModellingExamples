@@ -1,4 +1,4 @@
-%%  Initialization script for the Duffing continuous/discrete system simulation
+%%  Initialization script for the Duffing continuous system simulation
 
 %% Setup workspace
 
@@ -27,7 +27,6 @@ t_end = 10;
 
 % auxiliary parameters
 K = zeros(1,2); % no feedback
-Ts = 30*dt;     % controller sampling time
 
 %% Load and setup model
 
@@ -56,6 +55,10 @@ set_param(model, 'Solver', 'FixedStepAuto', 'FixedStep', 'dt' )
 for i=1:size(refMdls)
     set_param(refMdls{i},'SaveFormat','Dataset');   
 end
+
+% comment through the controller ZOH
+block = dereference_block(strjoin({model,'controller','adc'},blocksep)); % see SKD Matlab Toolset
+set_param(block,'Commented','through')
 
 %% Simulate Model
 
