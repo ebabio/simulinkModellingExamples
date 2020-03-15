@@ -5,6 +5,10 @@
 clear
 clc
 
+% add files to path
+filepath = fileparts(mfilename('fullpath'));
+addpath(genpath(filepath));
+
 %% Duffing system parameters
 % Reusing the nomenclature from: http://mathworld.wolfram.com/DuffingDifferentialEquation.html
 
@@ -22,7 +26,7 @@ phi = 0;
 
 % main sim parameters
 dt = 1e-2;
-x0 = [0; .1];
+x0 = [0; .5];
 t_end = 10;
 
 % auxiliary parameters
@@ -31,7 +35,7 @@ K = zeros(1,2); % no feedback
 %% Load and setup model
 
 % define model
-model = 'duffing';
+model = 'model_openloop';
 
 % terminate model if started
 try
@@ -56,25 +60,22 @@ for i=1:size(refMdls)
     set_param(refMdls{i},'SaveFormat','Dataset');   
 end
 
-% comment through the controller ZOH
-block = dereference_block(strjoin({model,'controller','adc'},blocksep)); % see SKD Matlab Toolset
-set_param(block,'Commented','through')
-
 %% Simulate Model
 
 % simulate
 simOut0 = sim(model);
 
 % Plot trajectory in phase portrait
-xSim0 = simOut0.yout{1}.Values.Data';
+xSim0 = simOut0.xout{1}.Values.Data';
 f1 = figure(1);
 clf reset
 f1.Name=  'Model Sim';
 f1.NumberTitle = 'off';
-plot(xSim0(1,:), xSim0(2,:))
 axis equal
+hold on
+plot(xSim0(1,:), xSim0(2,:))
 title('Duffing System Phase Portrait')
 xlabel('$x$','interpreter','latex')
 ylabel('$\dot{x}$','interpreter','latex')
-f1Legend{1} = 'x0';
+f1Legend{1} = 'open loop from X0';
 legend(f1Legend);
