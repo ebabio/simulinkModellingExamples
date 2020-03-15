@@ -40,13 +40,13 @@ linStruct = linmod(model, xEq, uEq);
 ol_sysCT = ss(linStruct.a, linStruct.b, linStruct.c, linStruct.d);
 ol_sysCT.StateName = {'x0', 'x1'};
 ol_sysCT.InputName = {'u'};
-ol_sysCT.OutputName = {'x0', 'x1'};
+ol_sysCT.OutputName = {'x'};
 
 % 2. linearize desired parts
 % using linearize: in Simulink Control Design, this one is the desired one
 setlinio(model, []);
 ioOL(1) = linio(strjoin({model,'u'},blocksep), 1,'openinput');
-ioOL(2) = linio(strjoin({model,'duffing'},blocksep), 1, 'output');
+ioOL(2) = linio(strjoin({model,'output'},blocksep), 1, 'output');
 setlinio(model,ioOL);
 
 % linearize

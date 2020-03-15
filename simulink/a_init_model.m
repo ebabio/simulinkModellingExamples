@@ -31,6 +31,7 @@ t_end = 10;
 
 % auxiliary parameters
 K = zeros(1,2); % no feedback
+yMask = [1, 0]; % only output position
 
 %% Load and setup model
 
