@@ -7,10 +7,14 @@ clc
 
 %% Initalize, trim and linearize the system
 
-% define parameters for the duffing system,
-% run an open loop sim and trim about a non equilibrium point
+% define parameters for the duffing system
 d_linearize_model;
 clc
+
+%% Closed Loop Parameters
+
+% apply reference to position only
+ref2Pos = [1;0];
 
 %% Design an LQR control
 
@@ -37,18 +41,27 @@ title('Poles in the s-domain')
 % define the CL model, we will work on it from now on
 modelCL = 'model_closedloop';
 
-% load it
+% load
 load_system(modelCL);
 
-% apply reference to position only
-ref2Pos = [1;0];
+% model settings
+% https://www.mathworks.com/help/simulink/slref/set_param.html
+set_param(modelCL, 'LoadExternalInput', 'off') % remove operating points
+set_param(modelCL, 'LoadInitialState', 'off')
+set_param(modelCL, 'Solver', 'FixedStepAuto', 'FixedStep', 'dt' )
+
+% reference models settings
+for i=1:size(refMdls)
+    set_param(refMdls{i},'SaveFormat','Dataset');   
+end
 
 % the model is continuous, comment the ADC block
 set_param(strjoin({modelCL,'adc'},blocksep), 'Commented', 'through')
 
 % simulate CL
 simOutCL = sim(modelCL);
-xCL = simOutCL.xout{1}.Values.Data';
+xCL_dataset = get_simulation_dataset(simOutCL.xout, 'x'); % get dataset from name
+xCL = xCL_dataset.Values.Data';
 
 figure(f1)
 plot(xCL(1,:), xCL(2,:))
@@ -100,7 +113,7 @@ display(lsysCL3)
 
 %% Closed vs Open Loop Properties
 
-legendLabel = {'lsysOl', 'lsysCL'};
+clLegend = {'lsysOl', 'lsysCL'};
 
 % Bode plot
 f3 = figure(3);
@@ -109,7 +122,7 @@ f3.Name = 'Bode plot';
 f3.NumberTitle = 'off';
 bodeHandle = bodeplot(lsysOL, lsysCL1);
 grid on
-legend(legendLabel)
+legend(clLegend)
 
 % Nyquist plot
 f4 = figure(4);
@@ -118,7 +131,7 @@ f4.Name = 'Nyquist plot';
 f4.NumberTitle = 'off';
 nyqHandle = nyquistplot(lsysOL, lsysCL1);
 grid on
-legend(legendLabel)
+legend(clLegend)
 
 % Nichols Plot
 f5 = figure(5);
@@ -127,8 +140,7 @@ f5.Name = 'Nyquist plot';
 f5.NumberTitle = 'off';
 nichHandle = nicholsplot(lsysOL, lsysCL1);
 grid on
-legend(legendLabel)
+legend(clLegend)
 
-% System margins
-[ gmOL , pmOL , wcgOL , wcpOL ] = margin(lsysOL);
+% System stability margins for the CL system
 [ gmCL , pmCL , wcgCL , wcpCL ] = margin(lsysCL1);

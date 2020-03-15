@@ -7,8 +7,7 @@ clc
 
 %% Run init script
 
-% define parameters for the duffing system,
-% run an open loop sim and trim about a non equilibrium point
+% define parameters for the duffing system
 a_init_model;
 
 %% Trim
@@ -54,3 +53,6 @@ lsysOL = linearize(model, ioOL);
 lsysOL.StateName = ol_sysCT.StateName;
 lsysOL.InputName = ol_sysCT.InputName;
 lsysOL.OutputName = ol_sysCT.OutputName;
+
+% display data
+display(lsysOL)

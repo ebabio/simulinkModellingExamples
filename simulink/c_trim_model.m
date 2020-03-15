@@ -50,7 +50,8 @@ set_param(model, 'InitialState', sprintf('getstatestruct(%s)', op_string) )
 simOut1 = sim(model);
 
 % Plot trajectory in phase portrait
-xSim1 = simOut1.xout{1}.Values.Data';
+xSim1_dataset = get_simulation_dataset(simOut1.xout, 'x'); % get dataset from name
+xSim1 = xSim1_dataset.Values.Data';
 f1 = figure(1);
 hold on
 f1.NumberTitle = 'off';
