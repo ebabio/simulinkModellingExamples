@@ -33,6 +33,6 @@ block = strjoin({model,'duffing','forcing'},blocksep);
 derefBlock = dereference_block(block); % see SKD Matlab Toolset
 
 % comment block
-set_param(derefBlock,'Commented', 'on')
+set_param(derefBlock,'Commented', 'on');
 
 

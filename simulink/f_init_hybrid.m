@@ -1,4 +1,4 @@
-%% Initialize a discrete controller for the Duffing continuous system
+%% Initialization script for the Duffing system with a discrete controller
 
 %% Setup workspace
 
@@ -20,7 +20,7 @@ clc
 %% Discrete Control Parameters
 
 % controller sampling time
-Ts = 0.2;
+Ts = 0.1;
 
 %% Setup Hybrid Time Model
 

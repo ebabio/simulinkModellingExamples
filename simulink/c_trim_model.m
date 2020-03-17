@@ -80,8 +80,8 @@ x0_struct = getstatestruct(opTrim);
 % https://www.mathworks.com/help/simulink/sfg/how-the-simulink-engine-interacts-with-c-s-functions.html
 [sizes, x0Alt, xStr] = feval(model, [],[],[],'compile');
 y = feval(model, 0, x0_struct, u0, 'outputs'); % need to do it before calling anything else
-xDot = feval(model, 0, x0_struct, u0, 'derivs'); % get the states derivatives
-xNext = feval(model, 0, x0_struct, u0, 'update'); % get next state of discrte states
+xDot = feval(model, 0, x0_struct, u0, 'derivs'); % get the value of continous derivatives
+xNext = feval(model, 0, x0_struct, u0, 'update'); % update state of discrete states
 feval(model, [],[],[],'term');
 
 % revert data format to dataset
@@ -106,8 +106,10 @@ function opspec = trim_constraints(opspec)
 
 % State (1) - model_openloop/duffing/duffingSystem/integrator/xDotIntegrator
 % - Default model initial conditions are used to initialize optimization.
-opspec.States(1).Min = [0.1;-Inf];
-opspec.States(1).Max = [0.5;Inf];
+paren = @(x, varargin) x(varargin{:}); % anonymous function to index an array through a function
+index = paren(getStateIndex_hotfix(opspec,'x'), 1);
+opspec.States(index).Min = [0.1;-Inf];
+opspec.States(index).Max = [0.5;Inf];
 
 % Set the constraints on the inputs in the model.
 % - The defaults for all inputs are Known = false, Min = -Inf, and

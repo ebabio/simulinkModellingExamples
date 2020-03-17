@@ -22,7 +22,7 @@ ref2Pos = [1;0];
 pOL = pole(lsysOL);
 
 % add a min input lqr control in continuous time
-[K, ~, pCL] = lqr(lsysOL, zeros(size(lsysOL.a)), ones(size(lsysOL.b,2)) );
+[K, ~, pCL] = lqr(lsysOL, 0*eye(size(lsysOL.a)), eye(size(lsysOL.b,2)) );
 
 % display new poles
 f2 = figure(2);
