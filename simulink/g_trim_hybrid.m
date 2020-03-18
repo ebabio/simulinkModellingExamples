@@ -4,7 +4,7 @@
 clear
 clc
 
-%% %% Initialize system
+%% Initialize system
 
 % define the duffing system
 f_init_hybrid;

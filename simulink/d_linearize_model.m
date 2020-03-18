@@ -11,13 +11,6 @@ clc
 a_init_model;
 
 %% Trim
-% this method is contained in Simulink Control Design. It much more
-% flexible than the classical trim function and can work with reference
-% model
-
-% operating point can be generated using the steady-state manager and exported here
-% and then trimmed in batches for example.
-
 % get an operating point from the current state
 op0 = operspec(model);
 
@@ -46,10 +39,10 @@ ol_sysCT.OutputName = {'x'};
 setlinio(model, []);
 ioOL(1) = linio(strjoin({model,'u'},blocksep), 1,'openinput');
 ioOL(2) = linio(strjoin({model,'output'},blocksep), 1, 'output');
-setlinio(model,ioOL);
+setlinio(model, ioOL);
 
 % linearize
-lsysOL = linearize(model, ioOL);
+lsysOL = linearize(model, ioOL, opTrim);
 lsysOL.StateName = ol_sysCT.StateName;
 lsysOL.InputName = ol_sysCT.InputName;
 lsysOL.OutputName = ol_sysCT.OutputName;
