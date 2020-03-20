@@ -25,10 +25,10 @@ pOL = pole(lsysOL);
 [K, ~, pCL] = lqr(lsysOL, 0*eye(size(lsysOL.a)), eye(size(lsysOL.b,2)) );
 
 % display new poles
-f2 = figure(2);
+f3 = figure(3);
 clf reset
-f2.Name=  'Pole Location';
-f2.NumberTitle = 'off';
+f3.Name=  'Pole Location';
+f3.NumberTitle = 'off';
 hold on
 grid on
 scatter(real(pOL), imag(pOL), 'x')
@@ -43,6 +43,12 @@ modelCL = 'model_closedloop';
 
 % load
 load_system(modelCL);
+
+% terminate model if started
+try
+    feval(modelCL, [],[],[],'term');
+catch
+end
 
 % model settings
 % https://www.mathworks.com/help/simulink/slref/set_param.html
@@ -116,28 +122,28 @@ display(lsysCL3)
 clLegend = {'lsysOl', 'lsysCL'};
 
 % Bode plot
-f3 = figure(3);
+f4 = figure(4);
 clf reset
-f3.Name = 'Bode plot';
-f3.NumberTitle = 'off';
+f4.Name = 'Bode plot';
+f4.NumberTitle = 'off';
 bodeHandle = bodeplot(lsysOL, lsysCL1);
 grid on
 legend(clLegend)
 
 % Nyquist plot
-f4 = figure(4);
+f5 = figure(5);
 clf reset
-f4.Name = 'Nyquist plot';
-f4.NumberTitle = 'off';
+f5.Name = 'Nyquist plot';
+f5.NumberTitle = 'off';
 nyqHandle = nyquistplot(lsysOL, lsysCL1);
 grid on
 legend(clLegend)
 
 % Nichols Plot
-f5 = figure(5);
+f6 = figure(6);
 clf reset
-f5.Name = 'Nyquist plot';
-f5.NumberTitle = 'off';
+f6.Name = 'Nichols plot';
+f6.NumberTitle = 'off';
 nichHandle = nicholsplot(lsysOL, lsysCL1);
 grid on
 legend(clLegend)

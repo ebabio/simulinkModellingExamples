@@ -45,14 +45,9 @@ set_param(derefBlock,'Commented', 'on');
 % Create the simulink input object
 simIn = Simulink.SimulationInput(model);
 
-% Set initial state: the origin (this is a bit messy)
-set_param(model,'SaveFinalState','on', 'SaveOperatingPoint','on', 'FinalStateName', 'myOpPoint'); % save model operating point
-simTemp = sim(model,'StopTime','0'); % void sim to get a SimulationOutput
-modelOpPoint = simTemp.myOpPoint; % get modelOperatingPoint
-% logged states are a dataset
-[~, stateIndex] = get_simulation_dataset(modelOpPoint.loggedStates, 'x');
-modelOpPoint.loggedStates{stateIndex}.Values.Data(1,:) = [0, 0];
-simIn = simIn.setInitialState(modelOpPoint);
+% Set initial state:
+% using the InitialState works badly.. instead modify the variable
+simIn = simIn.setVariable('x0',[0;0]);
 
 % Set inputs
 ts = timeseries(0*[1; 1], [0; t_end]);
@@ -75,9 +70,8 @@ f2.Name=  'Step response';
 f2.NumberTitle = 'off';
 axis equal
 hold on
-plot(xProg0_dataset.Values.Data(:,1)', xProg0_dataset.Values.Data(:,2)')
-% plot(xProg0_dataset.Values.Time', xProg0_dataset.Values.Data(:,1)')
-% plot(ts.Time', ts.Data')
+plot(xProg0_dataset.Values.Time', xProg0_dataset.Values.Data(:,1)')
+plot(ts.Time', ts.Data')
 title('Duffing System Step Response')
 xlabel('$x$','interpreter','latex')
 ylabel('time')

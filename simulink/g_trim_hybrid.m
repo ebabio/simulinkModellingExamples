@@ -24,7 +24,7 @@ op0 = operspec(modelCL);
 opspec = trim_constraints(op0);
 
 % find operating point
-opTrim = findop(modelCL,opspec);
+opTrim = findop(modelCL, opspec, trimopts);
 % there is a big difference between the reference command and the state due
 % to the instability of the system and the gain values. Increasing the
 % error state on the LQR reduces this error.

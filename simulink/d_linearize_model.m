@@ -11,11 +11,14 @@ clc
 a_init_model;
 
 %% Trim
+% no display trim data
+trimopts = findopOptions('DisplayReport','off');
+
 % get an operating point from the current state
 op0 = operspec(model);
 
-% find trim point
-opTrim = findop(model,op0);
+% find trim point: the equilibrium
+opTrim = findop(model, op0, trimopts);
 
 % get trim states
 [xEq, uEq] = getxu(opTrim);
