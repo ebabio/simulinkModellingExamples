@@ -1,0 +1,13 @@
+# FILES TO BE IGNORED FROM THE REPOSITORY
+
+# Data used as reference should not be part of the repository
+/references/
+
+# Simulink project folders and compiled Simulink models
+slprj/
+*.slxc
+*.autosave
+*.bak
+
+# Matlab backup files
+*.asv
