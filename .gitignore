@@ -7,7 +7,7 @@
 slprj/
 *.slxc
 *.autosave
-*.bak
 
 # Matlab backup files
 *.asv
+*.bak
